@@ -1,0 +1,6 @@
+{
+  "name": "Cash Book Pro - Multi-Account Ledger & Real-Time Finance Tracker",
+  "description": "Secure real-time cash book and multi-account ledger with Google Authentication, Firestore cloud sync, transaction tracking, analytics, and statement exports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

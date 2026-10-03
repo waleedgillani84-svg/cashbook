@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile information and personal app preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 512 },
+        "theme": { "type": "string", "enum": ["dark", "light", "blue", "green", "purple", "orange", "pink"], "maxLength": 20 },
+        "activeAccountId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid", "email", "displayName", "createdAt"]
+    },
+    "Account": {
+      "title": "Account",
+      "description": "Ledger account such as Main Cash, Bank, Personal, or Wallet",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "icon": { "type": "string", "maxLength": 10 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "name", "icon", "createdAt"]
+    },
+    "Entry": {
+      "title": "Entry",
+      "description": "Transaction entry for cash in or cash out in an account",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "accountId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["in", "out"], "maxLength": 5 },
+        "amount": { "type": "number" },
+        "details": { "type": "string", "maxLength": 200 },
+        "date": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "accountId", "type", "amount", "date", "createdAt"]
+    },
+    "TrashItem": {
+      "title": "TrashItem",
+      "description": "Deleted account or transaction entry retained in recycle bin",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "originalId": { "type": "string", "maxLength": 128 },
+        "itemType": { "type": "string", "enum": ["entry", "account"], "maxLength": 10 },
+        "name": { "type": "string", "maxLength": 60 },
+        "amount": { "type": "number" },
+        "details": { "type": "string", "maxLength": 200 },
+        "type": { "type": "string", "maxLength": 10 },
+        "accountId": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string", "maxLength": 64 },
+        "deletedAt": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "originalId", "itemType", "deletedAt", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Stores user profile information and app preferences"
+    },
+    "/users/{userId}/accounts/{accountId}": {
+      "schema": { "$ref": "#/entities/Account" },
+      "description": "Ledger accounts belonging to the specific user"
+    },
+    "/users/{userId}/entries/{entryId}": {
+      "schema": { "$ref": "#/entities/Entry" },
+      "description": "Financial cash in and cash out transactions"
+    },
+    "/users/{userId}/trash/{trashId}": {
+      "schema": { "$ref": "#/entities/TrashItem" },
+      "description": "Soft-deleted entries and accounts in user recycle bin"
+    }
+  }
+}
